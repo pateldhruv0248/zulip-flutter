@@ -419,11 +419,15 @@ class _LoginPageState extends State<LoginPage> {
     final zulipLocalizations = ZulipLocalizations.of(context);
 
     final externalAuthenticationMethods = widget.serverSettings.externalAuthenticationMethods;
-
+    final emailAuthEnabled = widget.serverSettings.emailAuthEnabled;
     final loginForm = Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      // Checking the Organization Settings for email and password based verification,
+      // Hide Username and Password fields, if it is disabled.
+      if (emailAuthEnabled) ...[
       _UsernamePasswordForm(loginPageState: this),
+      const OrDivider(),
+      ],
       if (externalAuthenticationMethods.isNotEmpty) ...[
-        const OrDivider(),
         ...externalAuthenticationMethods.map((method) {
           final icon = method.displayIcon;
           return OutlinedButton.icon(
